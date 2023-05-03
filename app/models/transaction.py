@@ -42,6 +42,8 @@ class Transaction(Base):
     type = Column(Enum(TrType), nullable=False)
     tr_hash = Column(String)
     tr_sign = Column(String)
+    block_id = Column(Integer)
+    user_hash = Column(String, nullable=False)
 
     transaction_in = relationship("TransactionIn", uselist=False, back_populates="transaction")
     transaction_out = relationship("TransactionOut", uselist=False, back_populates="transaction")
@@ -53,7 +55,6 @@ class TransactionIn(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     operator_hash = Column(String, nullable=False)
-    tourist_hash = Column(String, nullable=False)
     num_tourist = Column(Integer, nullable=False)
     region = Column(Enum(TrRegionEnum), nullable=False)
     period_start = Column(Date, nullable=False)
