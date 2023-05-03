@@ -17,6 +17,8 @@ class TransactionOutSchema(TransactionBaseSchema):
     id: int
     tr_hash: str | None
     tr_sign: str | None
+    block_id: int | None
+    user_hash: str | None
 
     class Config:
         orm_mode = True
@@ -24,7 +26,6 @@ class TransactionOutSchema(TransactionBaseSchema):
 
 class TransactionInCreateSchema(BaseModel):
     operator_hash: str
-    tourist_hash: str
     num_tourist: int
     region: TrRegionEnum
     payment_amount: int
@@ -33,9 +34,10 @@ class TransactionInCreateSchema(BaseModel):
 
 
 class TransactionInOutSchema(TransactionInCreateSchema):
-    # tr_id: int
+    id: int
     payment_id: int | None
     payment_status: TrPaymentStatus
+    transaction: TransactionOutSchema
 
     class Config:
         orm_mode = True
@@ -48,9 +50,10 @@ class TransactionOutCreateSchema(BaseModel):
 
 
 class TransactionOutOutSchema(TransactionOutCreateSchema):
-    tr_id: int
+    id: int
     payment_id: int | None
     payment_status: TrPaymentStatus
+    transaction: TransactionOutSchema
 
     class Config:
         orm_mode = True
@@ -64,15 +67,8 @@ class TransactionReportCreateSchema(BaseModel):
 
 
 class TransactionReportOutSchema(TransactionReportCreateSchema):
-    tr_id: int
-
-    class Config:
-        orm_mode = True
-
-
-class TransactionAllInfoSchema(BaseModel):
+    id: int
     transaction: TransactionOutSchema
-    info: TransactionInOutSchema | TransactionOutOutSchema | TransactionReportOutSchema
 
     class Config:
         orm_mode = True
