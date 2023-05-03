@@ -1,12 +1,11 @@
 from typing import List
 
-from sqlalchemy import select, update
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload, Query
+from sqlalchemy.orm import selectinload
 
 from app.db import async_session
-from app.models.transaction import TransactionIn, Transaction, TrType, TransactionOut, TransactionReport, \
-    TrPaymentStatus
+from app.models.transaction import Transaction
 
 
 class TransactionRepository:
