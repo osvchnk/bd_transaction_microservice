@@ -29,14 +29,14 @@ class TransactionService:
             raise ValueError(f"Invalid transaction type: {tr_type}")
 
     async def get_transaction_by_id(self, transaction_id: int) -> \
-            None | TransactionInOutSchema | TransactionOutSchema | TransactionReportOutSchema:
+            None | TransactionInOutSchema | TransactionOutOutSchema | TransactionReportOutSchema:
         transaction = await self.repository.get_transaction_by_id(transaction_id)
         if transaction is None:
             return None
         return TransactionSchemaConverter.convert_schema(transaction)
 
     async def get_transaction_by_user_hash(self, user_hash: str) -> \
-            list[TransactionInOutSchema | TransactionOutSchema | TransactionReportOutSchema] | None:
+            list[TransactionInOutSchema | TransactionOutOutSchema | TransactionReportOutSchema] | None:
         transactions = await self.repository.get_transactions_by_user_hash(hash=user_hash)
         result = []
         for transaction in transactions:
@@ -44,7 +44,7 @@ class TransactionService:
         return result
 
     async def get_transactions_by_block_id(self, block_id: int) -> \
-            list[TransactionInOutSchema | TransactionOutSchema | TransactionReportOutSchema] | None:
+            list[TransactionInOutSchema | TransactionOutOutSchema | TransactionReportOutSchema] | None:
 
         transactions = await self.repository.get_transactions_by_block_id(block_id)
         result = []
@@ -52,7 +52,8 @@ class TransactionService:
             result.append(TransactionSchemaConverter.convert_schema(transaction))
         return result
 
-    async def update_payment_status(self, transaction_id: int, payment_update: PaymentUpdate):
+    async def update_payment_status(self, transaction_id: int, payment_update: PaymentUpdate) -> \
+            TransactionInOutSchema | TransactionOutOutSchema:
         general_transaction = await self.repository.get_transaction_by_id(transaction_id)
 
         if general_transaction is None:
@@ -81,7 +82,8 @@ class TransactionService:
 
         return schema.from_orm(result)
 
-    async def sign_transaction(self, transaction_id: int, user_hash: str, sign: str):
+    async def sign_transaction(self, transaction_id: int, user_hash: str, sign: str) -> \
+            TransactionInOutSchema | TransactionOutOutSchema | TransactionReportOutSchema:
         general_transaction = await self.repository.get_transaction_by_id(transaction_id)
 
         if general_transaction.user_hash != user_hash:
