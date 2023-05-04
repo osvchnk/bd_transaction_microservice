@@ -18,7 +18,7 @@ class TransactionOutSchema(TransactionBaseSchema):
     tr_hash: str | None
     tr_sign: str | None
     block_id: int | None
-    user_hash: str | None
+    user_hash: str
 
     class Config:
         orm_mode = True
