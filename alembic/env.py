@@ -60,7 +60,8 @@ def run_migrations_offline() -> None:
         literal_binds=True,
         compare_type=True,
         include_object=include_object,
-        include_schemas=False
+        include_schemas=False,
+        version_table='alembic_transaction_service'
     )
 
     with context.begin_transaction():
@@ -70,7 +71,8 @@ def run_migrations_offline() -> None:
 def do_run_migrations(connection: Connection) -> None:
     context.configure(connection=connection,
                       target_metadata=target_metadata,
-                      include_object=include_object)
+                      include_object=include_object,
+                      version_table='alembic_transaction_service')
 
     with context.begin_transaction():
         context.run_migrations()
